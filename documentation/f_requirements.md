@@ -33,3 +33,26 @@ O sistema deve enviar um e-mail de alerta para um endereço pré-definido quando
 ## RF16: Gestão de Usuários:
 O sistema deve permitir o cadastro de funcionários, com diferentes níveis de permissão (ex: apenas visualização de relatórios vs. permissão para alterar produtos).
 
+# Requisitos Não Funcionais (propostos):
+
+## RNF01 – Segurança:
+O sistema deve armazenar senhas de usuários de forma segura.
+Deve haver controle de sessão e autenticação por login/senha. 
+## RNF02 – Desempenho e Tempo de Resposta:
+O sistema deve responder a ações do usuário em até 2 segundos.
+As buscas e operações de CRUD devem ser realizadas em no máximo 1 segundo.
+## RNF03 – Usabilidade e Acessibilidade:
+A interface deve ser intuitiva, permitindo fácil uso mesmo no modo de autoatendimento.
+Deve ter design responsivo para acesso tanto no interface de touch quanto em computador .
+## RNF04 – Qualidade dos Relatórios:
+Os relatórios devem ser gerados para visualização no próprio sistema e ter a possibilidade de gerar um PDF.
+## RNF05 – Manutenibilidade:
+O sistema deve ser desenvolvido com arquitetura modular para facilitar manutenção e futuras melhorias (ex: inclusão posterior de controle de estoque - atualmente dispensado).
+## RNF06 – Portabilidade e Multiplataforma:
+O sistema deve funcionar nos principais navegadores e sistemas operacionais (Windows, Android, etc.) conforme.
+## RNF07 – Disponibilidade:
+O sistema deve estar disponível de sexta a sábado, com estabilidade e sem interrupções durante esse período.
+## RNF08 – Confiabilidade nos pagamentos:
+As integrações de pagamento (Pix, cartão, dinheiro) devem ser realizadas com validação adequada, evitando falhas ou cobranças duplicadas.
+## RNF09 – Escalabilidade de usuários:
+O sistema deve suportar múltiplos usuários simultaneamente com separação clara de dados e sessões.
