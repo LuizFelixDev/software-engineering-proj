@@ -1,0 +1,26 @@
+{
+  "name": "software-engineering-proj",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuizFelixDev/software-engineering-proj.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuizFelixDev/software-engineering-proj/issues"
+  },
+  "homepage": "https://github.com/LuizFelixDev/software-engineering-proj#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  }
+}
