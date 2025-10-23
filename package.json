@@ -5,6 +5,7 @@
   "scripts": {
     "start:dev": "nodemon src/index.js"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LuizFelixDev/software-engineering-proj.git"
