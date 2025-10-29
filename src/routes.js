@@ -1,23 +1,14 @@
 import { Router } from "express";
-import * as ProdutosController from './controller/Produtos.js'; 
+import produtosRoutes from './routes/produtosRoutes.js';
+import vendasRoutes from './routes/vendasRoutes.js';
+import relatoriosRoutes from './routes/relatoriosRoutes.js';
 
 const router = Router();
 
-router.get('/', (req, res)=>{
-    res.json({
-        "statusCode": 200,
-        "msg": "API rodando"
-    });
-});
+router.get('/', (req, res) => res.json({ statusCode: 200, msg: "API rodando" }));
 
-function setupProdutosRoutes() {
-    router.get('/produtos', ProdutosController.selectProdutos);
-    router.get('/produto', ProdutosController.selectProduto);
-    router.post("/produto", ProdutosController.insertProduto);
-    router.put("/produto", ProdutosController.updateProduto);
-    router.delete("/produto", ProdutosController.deleteProduto);
-}
-
-setupProdutosRoutes(); 
+router.use('/produtos', produtosRoutes);
+router.use('/vendas', vendasRoutes);
+router.use('/relatorios', relatoriosRoutes);
 
 export default router;
