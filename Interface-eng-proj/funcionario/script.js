@@ -1,168 +1,187 @@
+/* ===========================
+   Painel Admin - Vênus Suplementos
+   CRUD Completo com Fetch API
+   =========================== */
+
 const apiUrl = 'http://localhost:3000/produtos';
-const defaultImage = 'https://via.placeholder.com/150';
+let produtos = [];
+let produtoSelecionado = null;
 
-// ==========================
-// Carregar todos os produtos
-// ==========================
-async function carregarCards() {
-  try {
-    const response = await fetch(apiUrl);
-    const produtos = await response.json();
+/* ---------- Utils ---------- */
+const formatarMoeda = (valor) =>
+  `R$ ${Number(valor).toFixed(2).replace('.', ',')}`;
 
-    const container = document.getElementById('cards-box');
-    container.innerHTML = '';
-
-    produtos.forEach((item) => {
-      const card = criarCard(item);
-      container.appendChild(card);
-    });
-  } catch (error) {
-    console.error('Erro ao carregar os cartões:', error);
-  }
+function mostrarMensagem(msg, tipo = 'info') {
+  const div = document.createElement('div');
+  div.className = `alert ${tipo}`;
+  div.textContent = msg;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 3000);
 }
 
-// ==========================
-// Criar card dinamicamente
-// ==========================
-function criarCard(item) {
-  const card = document.createElement('section');
-  card.classList.add('card');
-  card.dataset.id = item.id; // ✅ guarda o ID do produto
-
-  const imagem = item.imagem ? item.imagem : defaultImage;
-
-  card.innerHTML = `
-    <img src="${imagem}" alt="${item.nome}">
-    <p><strong>${item.nome}</strong></p>
-    <p>R$ ${item.preco}</p>
-  `;
-
-  card.addEventListener('click', () => mostrarDetalhes(item));
-  return card;
-}
-
-// ==========================
-// Modal de Detalhes
-// ==========================
-function mostrarDetalhes(item) {
-  document.getElementById('modal-imagem').src = item.imagem ? item.imagem : defaultImage;
-  document.getElementById('modal-nome').textContent = item.nome;
-  document.getElementById('modal-preco').textContent = `Preço: R$ ${item.preco}`;
-
-  const botoes = document.getElementById('modal-botoes');
-  botoes.innerHTML = `
-    <button id="btn-alterar">Alterar</button>
-    <button id="btn-excluir">Excluir</button>
-  `;
-
-  document.getElementById('btn-excluir').addEventListener('click', () => excluirProduto(item.id));
-  document.getElementById('btn-alterar').addEventListener('click', () => abrirFormularioEdicao(item));
-
-  document.getElementById('modal').style.display = 'flex';
-}
-
-// ==========================
-// Excluir produto
-// ==========================
-async function excluirProduto(id) {
-  const confirmacao = confirm('Tem certeza que deseja excluir este produto?');
-  if (!confirmacao) return;
-
-  try {
-    const response = await fetch(`${apiUrl}/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (response.ok) {
-      alert('Produto excluído com sucesso!');
-      fecharModal();
-      carregarCards();
-    } else {
-      alert('Erro ao excluir produto.');
-    }
-  } catch (error) {
-    console.error('Erro ao excluir:', error);
-  }
-}
-
-// ==========================
-// Abrir formulário de edição
-// ==========================
-function abrirFormularioEdicao(item) {
-  document.getElementById('modal').style.display = 'none';
-  document.getElementById('modal-editar').style.display = 'flex';
-
-  document.getElementById('edit-id').value = item.id;
-  document.getElementById('edit-nome').value = item.nome;
-  document.getElementById('edit-descricao').value = item.descricao || '';
-  document.getElementById('edit-marca').value = item.marca || '';
-  document.getElementById('edit-categoria').value = item.categoria || '';
-  document.getElementById('edit-quantidade').value = item.quantidade || 0;
-  document.getElementById('edit-preco').value = item.preco || 0;
-  document.getElementById('edit-estoque').value = item.estoque || 0;
-  document.getElementById('edit-estoqueM').value = item.estoqueM || 0;
-}
-
-// ==========================
-// Atualizar produto (PUT)
-// ==========================
-document.getElementById('form-editar').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const produtoAtualizado = {
-    id: Number(document.getElementById('edit-id').value),
-    nome: document.getElementById('edit-nome').value,
-    descricao: document.getElementById('edit-descricao').value,
-    marca: document.getElementById('edit-marca').value,
-    categoria: document.getElementById('edit-categoria').value,
-    quantidade: Number(document.getElementById('edit-quantidade').value),
-    preco: Number(document.getElementById('edit-preco').value),
-    estoque: Number(document.getElementById('edit-estoque').value),
-    estoqueM: Number(document.getElementById('edit-estoqueM').value),
-  };
-
-  console.log('Enviando produto atualizado:', produtoAtualizado);
-
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(produtoAtualizado),
-    });
-
-    if (response.ok) {
-      alert('Produto atualizado com sucesso!');
-      fecharModalEditar();
-      carregarCards();
-    } else {
-      alert('Erro ao atualizar o produto.');
-      console.log(await response.text());
-    }
-  } catch (error) {
-    console.error('Erro ao atualizar:', error);
-  }
+/* ---------- Inicialização ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  carregarProdutos();
+  configurarEventos();
 });
 
-// ==========================
-// Fechar modais
-// ==========================
+/* ---------- CRUD ---------- */
+async function carregarProdutos() {
+  try {
+    const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error('Erro ao buscar produtos');
+    produtos = await response.json();
+    renderizarProdutos(produtos);
+  } catch (error) {
+    console.error(error);
+    mostrarMensagem('Erro ao conectar com o servidor.', 'erro');
+  }
+}
+
+function renderizarProdutos(lista) {
+  const tbody = document.querySelector('#tabela-produtos tbody');
+  tbody.innerHTML = '';
+
+  if (lista.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6">Nenhum produto cadastrado.</td></tr>`;
+    return;
+  }
+
+  lista.forEach((p) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${p.id}</td>
+      <td>${p.nome}</td>
+      <td>${formatarMoeda(p.preco)}</td>
+      <td>${p.estoque}</td>
+      <td>${p.estoqueMinimo ?? '-'}</td>
+      <td>
+        <button class="btn-secundario editar" data-id="${p.id}">Editar</button>
+        <button class="btn-secundario excluir" data-id="${p.id}">Excluir</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.querySelectorAll('.editar').forEach((btn) => {
+    btn.addEventListener('click', () => abrirModalEdicao(btn.dataset.id));
+  });
+  document.querySelectorAll('.excluir').forEach((btn) => {
+    btn.addEventListener('click', () => excluirProduto(btn.dataset.id));
+  });
+}
+
+async function criarProduto(produto) {
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(produto),
+  });
+  if (!response.ok) throw new Error('Erro ao criar produto');
+}
+
+async function atualizarProduto(produto) {
+  const response = await fetch(apiUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(produto),
+  });
+  if (!response.ok) throw new Error('Erro ao atualizar produto');
+}
+
+async function excluirProduto(id) {
+  if (!confirm('Deseja realmente excluir este produto?')) return;
+  const response = await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
+  if (!response.ok) {
+    mostrarMensagem('Erro ao excluir produto.', 'erro');
+    return;
+  }
+  produtos = produtos.filter((p) => p.id != id);
+  renderizarProdutos(produtos);
+  mostrarMensagem('Produto excluído com sucesso.', 'sucesso');
+}
+
+/* ---------- Modal ---------- */
+function abrirModalEdicao(id = null) {
+  const modal = document.getElementById('modal');
+  modal.style.display = 'flex';
+  const titulo = document.getElementById('modal-titulo');
+
+  if (id) {
+    produtoSelecionado = produtos.find((p) => p.id == id);
+    titulo.textContent = 'Editar Produto';
+    preencherCampos(produtoSelecionado);
+  } else {
+    produtoSelecionado = null;
+    titulo.textContent = 'Novo Produto';
+    limparCampos();
+  }
+}
+
 function fecharModal() {
   document.getElementById('modal').style.display = 'none';
 }
 
-function fecharModalEditar() {
-  document.getElementById('modal-editar').style.display = 'none';
+function preencherCampos(produto) {
+  document.getElementById('nome').value = produto.nome;
+  document.getElementById('preco').value = produto.preco;
+  document.getElementById('estoque').value = produto.estoque;
+  document.getElementById('estoqueMinimo').value = produto.estoqueMinimo ?? '';
+  document.getElementById('imagem').value = produto.imagem ?? '';
 }
 
-document.getElementById('close-modal').addEventListener('click', fecharModal);
-document.getElementById('close-editar').addEventListener('click', fecharModalEditar);
+function limparCampos() {
+  document.getElementById('form-produto').reset();
+}
 
-document.getElementById('modal').addEventListener('click', (event) => {
-  if (event.target.id === 'modal') fecharModal();
-});
+/* ---------- Eventos ---------- */
+function configurarEventos() {
+  document.getElementById('btn-novo').addEventListener('click', () => abrirModalEdicao());
+  document.querySelectorAll('.fechar-modal').forEach((b) => b.addEventListener('click', fecharModal));
 
-document.getElementById('modal-editar').addEventListener('click', (event) => {
-  if (event.target.id === 'modal-editar') fecharModalEditar();
-});
+  document.getElementById('salvar-produto').addEventListener('click', async (e) => {
+    e.preventDefault();
 
-window.addEventListener('DOMContentLoaded', carregarCards);
+    const nome = document.getElementById('nome').value.trim();
+    const preco = parseFloat(document.getElementById('preco').value);
+    const estoque = parseInt(document.getElementById('estoque').value);
+    const estoqueMinimo = parseInt(document.getElementById('estoqueMinimo').value) || 0;
+    const imagem = document.getElementById('imagem').value.trim();
+
+    if (!nome || isNaN(preco) || isNaN(estoque)) {
+      mostrarMensagem('Preencha todos os campos obrigatórios.', 'erro');
+      return;
+    }
+
+    const produto = { nome, preco, estoque, estoqueMinimo, imagem };
+
+    try {
+      if (produtoSelecionado) {
+        produto.id = produtoSelecionado.id;
+        await atualizarProduto(produto);
+        mostrarMensagem('Produto atualizado com sucesso!', 'sucesso');
+      } else {
+        await criarProduto(produto);
+        mostrarMensagem('Produto criado com sucesso!', 'sucesso');
+      }
+
+      fecharModal();
+      await carregarProdutos();
+    } catch (error) {
+      console.error(error);
+      mostrarMensagem('Erro ao salvar produto.', 'erro');
+    }
+  });
+
+  document.getElementById('filtro').addEventListener('input', (e) => {
+    const termo = e.target.value.toLowerCase();
+    const filtrados = produtos.filter((p) =>
+      p.nome.toLowerCase().includes(termo)
+    );
+    renderizarProdutos(filtrados);
+  });
+
+  document.getElementById('modal').addEventListener('click', (e) => {
+    if (e.target.id === 'modal') fecharModal();
+  });
+}

@@ -3,70 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vênus Suplementos</title>
+  <title>Painel Admin - Vênus Suplementos</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <header>
-    <div id="title">
-      <h1>Vênus Suplementos</h1>
-      <p>Sistema de controle</p>
-    </div>
+  <header class="topbar">
+    <h1>🧡 Painel Admin - Vênus Suplementos</h1>
+    <button id="btn-novo" class="btn-primary">+ Novo Produto</button>
   </header>
 
-  <nav>
-    <a class="navg" href="#">Suplementos</a>
-    <a class="navg" href="#">Vendas</a>
-    <a class="navg" href="#">Relatórios</a>
-  </nav>
+  <main>
+    <section class="filtros">
+      <input id="filtro" type="text" placeholder="Filtrar produtos por nome..." />
+    </section>
 
-  <div id="cards-box"></div>
+    <section class="tabela">
+      <table id="tabela-produtos">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Estoque</th>
+            <th>Estoque Mínimo</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
 
-  <!-- Modal Detalhes -->
+  <!-- Modal de Edição/Criação -->
   <div id="modal" class="modal">
-    <div id="modal-content">
-      <button id="close-modal">Fechar</button>
-      <img id="modal-imagem" src="" alt="Imagem do produto" />
-      <h2 id="modal-nome"></h2>
-      <p id="modal-preco"></p>
-      <div id="modal-botoes"></div>
-    </div>
-  </div>
+    <div class="modal-conteudo">
+      <div class="modal-header">
+        <h2 id="modal-titulo">Novo Produto</h2>
+        <button class="fechar-modal">×</button>
+      </div>
 
-  <!-- Modal Edição -->
-  <div id="modal-editar" class="modal">
-    <div id="modal-content-editar">
-      <button id="close-editar">Fechar</button>
-      <h2>Editar Produto</h2>
-      <form id="form-editar">
-        <input type="hidden" id="edit-id" />
+      <form id="form-produto">
+        <label>Nome:
+          <input type="text" id="nome" required />
+        </label>
 
-        <label>Nome:</label>
-        <input type="text" id="edit-nome" required />
+        <label>Preço (R$):
+          <input type="number" step="0.01" id="preco" required />
+        </label>
 
-        <label>Descrição:</label>
-        <input type="text" id="edit-descricao" />
+        <label>Estoque:
+          <input type="number" id="estoque" required />
+        </label>
 
-        <label>Marca:</label>
-        <input type="text" id="edit-marca" />
+        <label>Estoque Mínimo:
+          <input type="number" id="estoqueMinimo" />
+        </label>
 
-        <label>Categoria:</label>
-        <input type="text" id="edit-categoria" />
+        <label>URL da Imagem:
+          <input type="text" id="imagem" placeholder="https://..." />
+        </label>
 
-        <label>Quantidade:</label>
-        <input type="number" id="edit-quantidade" />
-
-        <label>Preço:</label>
-        <input type="number" step="0.01" id="edit-preco" />
-
-        <label>Estoque:</label>
-        <input type="number" id="edit-estoque" />
-
-        <label>Estoque Mínimo:</label>
-        <input type="number" id="edit-estoqueM" />
-
-        <button type="submit">Atualizar</button>
+        <div class="acoes-modal">
+          <button type="button" class="btn-secundario fechar-modal">Cancelar</button>
+          <button id="salvar-produto" class="btn-primary" type="submit">Salvar</button>
+        </div>
       </form>
     </div>
   </div>
