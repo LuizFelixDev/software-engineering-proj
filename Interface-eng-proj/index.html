@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autoatendimento Moderno</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="logo">Self <span class="orange">Service</span></h1>
+        <div class="cart-icon" id="cart-icon">
+            🛒 <span id="cart-count" class="cart-badge">0</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="products-section">
+            <h2>Nossos Produtos</h2>
+            <div id="product-list" class="product-grid">
+                </div>
+        </section>
+
+        <aside id="cart-aside" class="cart-aside hidden">
+            <h3>Seu Carrinho</h3>
+            <div id="cart-items">
+                </div>
+            <div class="cart-summary">
+                <p>Total: <span id="cart-total">R$ 0,00</span></p>
+                <button id="finish-purchase-btn" class="btn-primary">Finalizar Compra</button>
+                <button id="cancel-purchase-btn" class="btn-secondary">Cancelar</button>
+            </div>
+        </aside>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

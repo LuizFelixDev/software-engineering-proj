@@ -1,0 +1,252 @@
+:root {
+    --orange: #FF8C00; /* Laranja principal */
+    --black: #1A1A1A; /* Preto quase absoluto */
+    --white: #F8F8F8; /* Branco off-white para o fundo */
+    --light-gray: #CCCCCC;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: var(--white);
+    color: var(--black);
+}
+
+/* --- Cabeçalho e Carrinho Flutuante --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: var(--black);
+    color: var(--white);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 1.8em;
+}
+
+.logo .orange {
+    color: var(--orange);
+}
+
+.cart-icon {
+    font-size: 1.5em;
+    cursor: pointer;
+    position: relative;
+    padding: 5px;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--orange);
+    color: var(--black);
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.7em;
+    font-weight: bold;
+}
+
+/* --- Layout Principal --- */
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    gap: 30px;
+}
+
+.products-section {
+    flex-grow: 1;
+}
+
+h2 {
+    color: var(--black);
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--orange);
+    padding-bottom: 5px;
+}
+
+/* --- Grid de Produtos (Cards) --- */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background-color: var(--white);
+    border-radius: 15px; /* Bordas Arredondadas */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.card h4 {
+    color: var(--black);
+    margin-bottom: 5px;
+}
+
+.card p {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+
+.card .price {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--orange);
+    margin-bottom: 10px;
+}
+
+.card button {
+    background-color: var(--orange);
+    color: var(--black);
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.card button:hover {
+    background-color: #ffaa33;
+}
+
+/* --- Carrinho Lateral --- */
+.cart-aside {
+    width: 300px;
+    background-color: var(--black);
+    color: var(--white);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    align-self: flex-start; /* Fica no topo */
+}
+
+.cart-aside h3 {
+    color: var(--orange);
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--orange);
+    padding-bottom: 10px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #444;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.item-info {
+    flex-grow: 1;
+}
+
+.item-name {
+    font-weight: bold;
+}
+
+.item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 10px;
+}
+
+.quantity-btn {
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.cart-summary {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid var(--orange);
+}
+
+.cart-summary p {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    background-color: var(--orange);
+    color: var(--black);
+}
+
+.btn-primary:hover {
+    background-color: #ffaa33;
+}
+
+.btn-secondary {
+    background-color: var(--light-gray);
+    color: var(--black);
+}
+
+.btn-secondary:hover {
+    background-color: #b3b3b3;
+}
+
+/* --- Classes de Utilidade --- */
+.hidden {
+    display: none !important;
+}
+
+/* Responsividade básica */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .cart-aside {
+        width: 100%;
+    }
+}
