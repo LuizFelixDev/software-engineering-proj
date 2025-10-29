@@ -1,9 +1,13 @@
 import express from 'express';
+import cors from 'cors';
 import { createTable } from './controller/Produtos.js';
 import * as VendasController from './controller/Vendas.js';
 import router from './routes.js';
 
 const app = express();
+
+app.use(cors());
+
 app.use(express.json());
 
 try {
