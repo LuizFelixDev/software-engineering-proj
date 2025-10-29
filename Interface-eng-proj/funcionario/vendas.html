@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Admin - Vênus Suplementos | Gestão de Vendas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Painel Admin - Vênus Suplementos</h1>
+    <button id="btn-novo" class="btn-primary">+ Registrar Venda</button>
+  </header>
+
+  <main>
+    <section class="filtros">
+      <input id="filtro" type="text" placeholder="Filtrar vendas por nome do produto..." />
+    </section>
+
+    <section class="tabela">
+      <table id="tabela-vendas">
+        <thead>
+          <tr>
+            <th>ID Venda</th>
+            <th>Produto</th>
+            <th>Qtd.</th>
+            <th>Preço Unitário</th>
+            <th>Total</th>
+            <th>Data</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <div id="modal" class="modal">
+    <div class="modal-conteudo">
+      <div class="modal-header">
+        <h2 id="modal-titulo">Registrar Nova Venda</h2>
+        <button class="fechar-modal">×</button>
+      </div>
+
+      <form id="form-venda">
+        <label id="label-produto-id">Produto:
+            <select id="produto_id" required>
+                <option value="">Carregando produtos...</option>
+            </select>
+        </label>
+        
+        <label id="label-produto-nome" style="display: none;">Produto:
+            <input type="text" id="produto_nome_display" disabled />
+        </label>
+
+        <label>Quantidade:
+          <input type="number" id="quantidade" min="1" required />
+        </label>
+
+        <div class="acoes-modal">
+          <button type="button" class="btn-secundario fechar-modal">Cancelar</button>
+          <button id="salvar-venda" class="btn-primary" type="submit">Salvar Venda</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="vendas.js"></script>
+</body>
+</html>
